@@ -1,0 +1,42 @@
+Microsoft (R) COFF/PE Dumper Version 14.42.34435.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file VCIAccess.dll
+
+File Type: DLL
+
+  Section contains the following exports for VCIAccess.dll
+
+    00000000 characteristics
+    5E399B66 time date stamp Tue Feb  4 17:27:18 2020
+        0.00 version
+           1 ordinal base
+          15 number of functions
+          15 number of names
+
+    ordinal hint RVA      name
+
+          1    0 00007300 _bindProtocol
+          2    1 00007C50 _broadcast
+          3    2 00007060 _changeComLine
+          4    3 000074E0 _changeComParam
+          5    4 00006F50 _closeSession
+          6    5 00008310 _getAnalogicData
+          7    6 00006A80 _getFirmwareVersion
+          8    7 00008530 _getOperationResult
+          9    8 00008500 _getOperationStatus
+         10    9 000069F0 _getVersion
+         11    A 00006D40 _openSession
+         12    B 000076A0 _performInit
+         13    C 000084E0 _performTransferData
+         14    D 00007910 _writeAndRead
+         15    E 00007FB0 _writeAndReadMultipleFrames
+
+  Summary
+
+        1000 .data
+        3000 .rdata
+        1000 .reloc
+        1000 .rsrc
+        B000 .text
