@@ -4,6 +4,7 @@
 use std::ffi::{c_char, CString};
 use std::io;
 use std::io::BufRead;
+use std::num::ParseIntError;
 use lazy_static::lazy_static;
 
 lazy_static! {
@@ -14,9 +15,8 @@ lazy_static! {
     static ref GET_FW_VERSION: libloading::Symbol<'static, unsafe extern fn(a: *const c_char, s: u32) -> u32> = unsafe { LIB.get(b"_getFirmwareVersion").unwrap() };
     static ref CHANGE_COM_LINE: libloading::Symbol<'static, unsafe extern fn(to: u32) -> u32> = unsafe { LIB.get(b"_changeComLine").unwrap() };
     static ref BIND_PROTOCOL: libloading::Symbol<'static, unsafe extern fn(a: *const c_char, s: u32) -> u32> = unsafe { LIB.get(b"_bindProtocol").unwrap() };
-    static ref WRITE_AND_READ: libloading::Symbol<'static, unsafe extern fn(ecu_descriptor: *const c_char, ecu_descriptor_s: u32, in_buffer: *const c_char, in_buffer_s: u32, out_buffer: *const c_char, out_buffer_s: u32, time_out: u32) -> u32> = unsafe { LIB.get(b"_writeAndRead").unwrap() };
+    static ref WRITE_AND_READ: libloading::Symbol<'static, unsafe extern fn(ecu_descriptor: *const u8, ecu_descriptor_s: u32, in_buffer: *const u8, in_buffer_s: u32, out_buffer: *const c_char, out_buffer_s: u32, time_out: u32) -> u32> = unsafe { LIB.get(b"_writeAndRead").unwrap() };
 }
-
 fn main() {
     std::env::set_current_dir("C:\\");
     const BUFFER_SIZE: usize = 2048;
@@ -69,14 +69,17 @@ fn main() {
                 }
                 "write_and_read" => {
                     let ecuDescriptor = *parts.get(1).unwrap();
-                    let mut ecuStr = CString::new(ecuDescriptor).unwrap();
+                    let mut ecuCode = hex::decode(ecuDescriptor).unwrap();
+
                     let inBuffer = *parts.get(2).unwrap();
-                    let mut inStr = CString::new(inBuffer).unwrap();
+                    let mut inCode =  hex::decode(inBuffer).unwrap();
+
+
                     let timeout = parts.get(3).unwrap();
                     let timeoutValue = timeout.parse::<u32>().unwrap();
 
                     let ptr = read_buffer.as_mut_ptr() as *mut i8;
-                    let changed = WRITE_AND_READ(ecuStr.as_ptr(), ecuDescriptor.len() as u32, inStr.as_ptr(), inBuffer.len() as u32, ptr, BUFFER_SIZE as u32, timeoutValue);
+                    let changed = WRITE_AND_READ(ecuCode.as_ptr(), 4, inCode.as_ptr(), inCode.len() as u32, ptr, BUFFER_SIZE as u32, timeoutValue);
 
                     if changed > 0 {
                         let mut output = String::new();

@@ -3,18 +3,16 @@
 version = 4
 
 [[package]]
-name = "actiaproxy"
-version = "0.1.0"
-dependencies = [
- "lazy_static",
- "libloading",
-]
-
-[[package]]
 name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+
+[[package]]
+name = "hex"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "lazy_static"
@@ -30,6 +28,15 @@ checksum = "fc2f4eb4bc735547cfed7c0a4922cbd04a4655978c09b54f1f7b228750664c34"
 dependencies = [
  "cfg-if",
  "windows-targets",
+]
+
+[[package]]
+name = "vciproxy"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "lazy_static",
+ "libloading",
 ]
 
 [[package]]
