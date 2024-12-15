@@ -14,7 +14,7 @@ lazy_static! {
     static ref GET_VERSION: libloading::Symbol<'static, unsafe extern fn() -> u32> = unsafe { LIB.get(b"_getVersion").unwrap() };
     static ref GET_FW_VERSION: libloading::Symbol<'static, unsafe extern fn(a: *const c_char, s: u32) -> u32> = unsafe { LIB.get(b"_getFirmwareVersion").unwrap() };
     static ref CHANGE_COM_LINE: libloading::Symbol<'static, unsafe extern fn(to: u32) -> u32> = unsafe { LIB.get(b"_changeComLine").unwrap() };
-    static ref BIND_PROTOCOL: libloading::Symbol<'static, unsafe extern fn(a: *const c_char, s: u32) -> u32> = unsafe { LIB.get(b"_bindProtocol").unwrap() };
+    static ref BIND_PROTOCOL: libloading::Symbol<'static, unsafe extern fn(a: *const u8, s: u32) -> u32> = unsafe { LIB.get(b"_bindProtocol").unwrap() };
     static ref WRITE_AND_READ: libloading::Symbol<'static, unsafe extern fn(ecu_descriptor: *const u8, ecu_descriptor_s: u32, in_buffer: *const u8, in_buffer_s: u32, out_buffer: *const c_char, out_buffer_s: u32, time_out: u32) -> u32> = unsafe { LIB.get(b"_writeAndRead").unwrap() };
 }
 fn main() {
@@ -57,8 +57,8 @@ fn main() {
                 }
                 "bind_protocol" => {
                     let descriptor = *parts.get(1).unwrap();
-                    let mut cstr = CString::new(descriptor).unwrap();
-                    let ret = BIND_PROTOCOL(cstr.as_ptr(), descriptor.len() as u32); // todo: check if null termination required
+                    let mut code = hex::decode(descriptor).unwrap();
+                    let ret = BIND_PROTOCOL(code.as_ptr(), descriptor.len() as u32); // todo: check if null termination required
                     println!("bind_protocol|{}", ret);
                 }
                 "change_com_line" => {
@@ -73,7 +73,6 @@ fn main() {
 
                     let inBuffer = *parts.get(2).unwrap();
                     let mut inCode =  hex::decode(inBuffer).unwrap();
-
 
                     let timeout = parts.get(3).unwrap();
                     let timeoutValue = timeout.parse::<u32>().unwrap();
