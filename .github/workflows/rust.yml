@@ -11,10 +11,14 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
+    - name: Install latest nightly
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        override: true
+        components: rustfmt, clippy
     - name: Rustup
       run: rustup target add i686-pc-windows-msvc
     - uses: actions/checkout@v4
@@ -24,3 +28,8 @@ jobs:
       with:
         name: vciproxy.exe
         path: target/i686-pc-windows-msvc/debug/vciproxy.exe
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: target/i686-pc-windows-msvc/debug/vciproxy.exe
