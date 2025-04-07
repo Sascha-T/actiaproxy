@@ -21,6 +21,8 @@ jobs:
         components: rustfmt, clippy
     - name: Rustup
       run: rustup target add i686-pc-windows-gnu
+    - name: Toolchain
+      run: sudo apt-get install gcc-mingw-w64
     - uses: actions/checkout@v4
     - name: Build
       run: cargo build --verbose --target i686-pc-windows-gnu
