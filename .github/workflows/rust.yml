@@ -29,9 +29,9 @@ jobs:
     - uses: actions/upload-artifact@v4.6.2
       with:
         name: vciproxy.exe
-        path: target/i686-pc-windows-msvc/debug/vciproxy.exe
+        path: target/i686-pc-windows-gcc/debug/vciproxy.exe
     - name: Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: target/i686-pc-windows-msvc/debug/vciproxy.exe
+        files: target/i686-pc-windows-gcc/debug/vciproxy.exe
