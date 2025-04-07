@@ -21,6 +21,8 @@ jobs:
         components: rustfmt, clippy
     - name: Rustup
       run: rustup target add i686-pc-windows-msvc
+    - name: Rustup 2
+      run: rustup default nightly-i686-pc-windows-msvc
     - uses: actions/checkout@v4
     - name: Build
       run: cargo build --verbose
